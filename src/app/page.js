@@ -1,16 +1,12 @@
-// src/app/page.js
 import LessonView from '../components/LessonView';
 
 async function getLesson() {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-  
-  const res = await fetch(`${baseUrl}/lessons/3`, {
+  const res = await fetch('https://ruby-duo-api.onrender.com/lessons/3', {
     cache: 'no-store'
   });
   
   if (!res.ok) {
-    console.error(`Erro ao buscar: ${baseUrl}/lessons/3`);
-    throw new Error('Falha ao buscar lição');
+    throw new Error('Falha ao buscar lição no Render');
   }
   
   return res.json();
