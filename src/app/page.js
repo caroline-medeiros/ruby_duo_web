@@ -1,11 +1,15 @@
+// src/app/page.js
 import LessonView from '../components/LessonView';
 
 async function getLesson() {
-  const res = await fetch('http://localhost:3000/lessons/5', {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+  
+  const res = await fetch(`${baseUrl}/lessons/3`, {
     cache: 'no-store'
   });
   
   if (!res.ok) {
+    console.error(`Erro ao buscar: ${baseUrl}/lessons/3`);
     throw new Error('Falha ao buscar lição');
   }
   
