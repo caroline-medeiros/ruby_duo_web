@@ -5,7 +5,6 @@ export const Container = styled.div`
   height: 12px;
   background-color: #e5e5e5;
   border-radius: 6px;
-  margin-bottom: 30px;
   overflow: hidden;
 `;
 
