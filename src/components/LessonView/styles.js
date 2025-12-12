@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 
 const colors = {
   rubyRed: '#e02d3a',
@@ -12,7 +13,7 @@ const colors = {
 
 export const Container = styled.div`
   min-height: 100vh;
-  background-color: #f0f2f5; /* Cinza claro nas laterais (adeus preto!) */
+  background-color: #ffffffff;
   display: flex;
   justify-content: center; /* Centraliza o app */
 `;
@@ -24,7 +25,6 @@ export const AppScreen = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  box-shadow: 0 0 20px rgba(0,0,0,0.05); /* Sombra suave nas laterais */
   position: relative;
 `;
 
@@ -150,5 +150,60 @@ export const CheckButton = styled.button`
   &:active {
     box-shadow: none;
     transform: translateY(4px);
+  }
+`;
+
+const pulseAnimation = keyframes`
+  0% { box-shadow: 0 0 0 0 rgba(106, 17, 203, 0.7); transform: scale(1); }
+  50% { box-shadow: 0 0 0 10px rgba(106, 17, 203, 0); transform: scale(1.02); }
+  100% { box-shadow: 0 0 0 0 rgba(106, 17, 203, 0); transform: scale(1); }
+`;
+
+export const AiButton = styled.button`
+  margin-top: 15px;
+  background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  
+  /* A Mágica do Brilho ✨ */
+  animation: ${pulseAnimation} 2s infinite;
+
+  &:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    animation: none;
+  }
+`;
+
+export const AiResponseBox = styled.div`
+  margin-top: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 5px solid #6a11cb;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  animation: slideIn 0.3s ease;
+
+  strong {
+    color: #6a11cb;
+    display: block;
+    margin-bottom: 5px;
   }
 `;

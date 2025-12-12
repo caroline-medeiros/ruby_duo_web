@@ -7,8 +7,7 @@ import { FaTimes, FaHeart, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { 
   Container, Header, CloseButton, HeartsContainer, ProgressBarContainer, 
   Content, Title, OptionsGrid, Footer, CheckButton, FeedbackMsg, 
-  AppScreen
-} from './styles';
+  AppScreen, AiButton, AiResponseBox, } from './styles';
 
 import ProgressBar from '../ProgressBar'; 
 import OptionButton from '../OptionButton'; 
@@ -33,6 +32,8 @@ export default function LessonView({ lesson }) {
   const [status, setStatus] = useState('idle');
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [aiExplanation, setAiExplanation] = useState(null);
+  const [loadingAi, setLoadingAi] = useState(false);
 
   const currentQuestion = lesson.questions[currentIndex];
   const progress = ((currentIndex) / lesson.questions.length) * 100;
@@ -70,10 +71,41 @@ export default function LessonView({ lesson }) {
       setCurrentIndex(nextIndex);
       setSelectedOptionId(null);
       setStatus('idle');
+      
+      setAiExplanation(null);
+      
     } else {
       setShowResult(true);
     }
   };
+
+  const handleAskAi = async () => {
+  setLoadingAi(true);
+  
+  const questionText = currentQuestion.body;
+  const wrongOptionText = currentQuestion.options.find(o => o.id === selectedOptionId)?.body;
+  const correctOptionText = currentQuestion.options.find(o => o.correct)?.body;
+
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/ai/explain`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        question: questionText,
+        wrong: wrongOptionText,
+        correct: correctOptionText
+      })
+    });
+    
+    const data = await res.json();
+    setAiExplanation(data.explanation);
+  } catch (error) {
+    setAiExplanation("O professor IA está dormindo agora. Tente depois!");
+  } finally {
+    setLoadingAi(false);
+  }
+};
 
   if (showResult) {
     return (
@@ -139,6 +171,17 @@ export default function LessonView({ lesson }) {
             <div>
               <h3>Incorreto...</h3>
               <p>A resposta correta é: <strong>{correctOption?.body}</strong></p>
+              
+              {!aiExplanation ? (
+                  <AiButton onClick={handleAskAi} disabled={loadingAi}>
+                    {loadingAi ? '✨ Pensando...' : '✨ Explicar com IA'}
+                  </AiButton>
+                ) : (
+                  <AiResponseBox>
+                    <strong>🤖 Ruby IA Tutor:</strong> 
+                    {aiExplanation}
+                  </AiResponseBox>
+                )}
             </div>
           </FeedbackMsg>
         )}

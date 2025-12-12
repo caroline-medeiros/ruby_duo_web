@@ -6,7 +6,7 @@ export default function HomeView({ lessons }) {
   return (
     <Container>
       <Header>
-        <Title>🦉 RubyDuo</Title>
+        <Title>💎 RubyDuo</Title>
         <Subtitle>Escolha um módulo e comece a praticar agora!</Subtitle>
       </Header>
 
